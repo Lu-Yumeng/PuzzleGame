@@ -21,3 +21,12 @@
 含有隐藏容器 : getContentPane()
 default place at center
 - setLayout(null) to stop display pic at center
+
+## Event
+- source: button/ image/ window
+- event: click, keyboard input
+- listen: when sth happened, execute sth
+  - keyListener
+  - MouseListener
+  - ActionListener
+  
