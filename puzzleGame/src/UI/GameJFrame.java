@@ -23,7 +23,11 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     String path = "image/animal/animal1/";
     int cnt = 0;
 
-    JMenuItem changePic = new JMenuItem("Change Pic");
+
+    JMenuItem girl = new JMenuItem("Girls");
+    JMenuItem animal = new JMenuItem("Animal ");
+    JMenuItem sports = new JMenuItem("Sports");
+
     JMenuItem replayGame = new JMenuItem("Replay game");
     JMenuItem relogin = new JMenuItem("Relogin");
     JMenuItem closeGame = new JMenuItem("Close game");
@@ -96,6 +100,14 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
         JMenu functionjMenu = new JMenu("Function");
         JMenu aboutUsjMenu = new JMenu("About Us");
+
+        JMenu changePic = new JMenu("Change Pic");
+        changePic.add(girl);
+        changePic.add(animal);
+        changePic.add(sports);
+        girl.addActionListener(this);
+        animal.addActionListener(this);
+        sports.addActionListener(this);
 
 
         replayGame.addActionListener(this);
@@ -260,7 +272,8 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object jbtn = e.getSource();
-        System.out.println(jbtn);
+        // System.out.println(jbtn);
+        Random r = new Random();
         if (jbtn == replayGame){
             System.out.println("replay");
             // shuffle
@@ -269,7 +282,6 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             cnt = 0;
             // reload image
             initImage();
-
         } else if (jbtn == relogin){
             System.out.println("relogin");
             // close current window
@@ -291,6 +303,27 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         } else if(jbtn == closeGame){
             System.out.println("close");
             System.exit(0);
+        } else if (jbtn == girl){
+            path = "image/girl/girl";
+            int num = r.nextInt(13)+1;
+            path += num+"/";
+            initData();
+            cnt = 0;
+            initImage();
+        } else if (jbtn == animal){
+            path = "image/animal/animal";
+            int num = r.nextInt(8)+1;
+            path += num+"/";
+            initData();
+            cnt = 0;
+            initImage();
+        } else if (jbtn == sports){
+            path = "image/sport/sport";
+            int num = r.nextInt(9)+1;
+            path += num+"/";
+            initData();
+            cnt = 0;
+            initImage();
         }
     }
 }
