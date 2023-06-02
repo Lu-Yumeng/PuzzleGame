@@ -27,6 +27,25 @@ default place at center
 - event: click, keyboard input
 - listen: when sth happened, execute sth
   - keyListener
+    - keyPress
+    - keyRelease
+    - keTyped
   - MouseListener
+    - Exit
+    - Enter
+    - Release
+    - press
+    - click
   - ActionListener
-  
+
+单击事件：
+- ActionListener
+- MouseListener onclick
+- MouseListener release
+
+路径：
+- 绝对路径：盘符开始 
+- 相对路径：相对当前项目而言的，在当前文件夹下寻找xxx
+
+按住A不松开，显示完整图片
+松开A显示随机打乱的图片
