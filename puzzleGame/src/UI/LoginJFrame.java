@@ -3,18 +3,27 @@ package UI;
 import User.User;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import Util.CodeUtil;
 
-public class LoginJFrame extends JFrame {
+public class LoginJFrame extends JFrame implements MouseListener {
     //创建一个集合存储正确的用户名和密码
     static ArrayList<User> list = new ArrayList<>();
     static {
         list.add(new User("zhangsan","123"));
         list.add(new User("lisi","1234"));
     }
-
+    JButton login = new JButton();
+    JButton register = new JButton();
+    JLabel rightCode = new JLabel();
+    JTextField username = new JTextField();
+    JTextField password = new JTextField();
+    JTextField code = new JTextField();
+    String codeStr;
 
     public LoginJFrame() {
         //初始化界面
@@ -34,7 +43,6 @@ public class LoginJFrame extends JFrame {
         this.getContentPane().add(usernameText);
 
         //2.添加用户名输入框
-        JTextField username = new JTextField();
         username.setBounds(195, 134, 200, 30);
         this.getContentPane().add(username);
 
@@ -44,7 +52,6 @@ public class LoginJFrame extends JFrame {
         this.getContentPane().add(passwordText);
 
         //4.密码输入框
-        JTextField password = new JTextField();
         password.setBounds(195, 195, 200, 30);
         this.getContentPane().add(password);
 
@@ -54,37 +61,36 @@ public class LoginJFrame extends JFrame {
         this.getContentPane().add(codeText);
 
         //验证码的输入框
-        JTextField code = new JTextField();
         code.setBounds(195, 256, 100, 30);
         this.getContentPane().add(code);
 
-        String codeStr = CodeUtil.getCode();
-        JLabel rightCode = new JLabel();
+        codeStr = CodeUtil.getCode();
         //设置内容
         rightCode.setText(codeStr);
         //位置和宽高
         rightCode.setBounds(300, 256, 50, 30);
+        rightCode.addMouseListener(this);
         //添加到界面
         this.getContentPane().add(rightCode);
 
         //5.添加登录按钮
-        JButton login = new JButton();
         login.setBounds(123, 310, 128, 47);
         login.setIcon(new ImageIcon("image/login/登录按钮.png"));
         //去除按钮的默认边框
         login.setBorderPainted(false);
         //去除按钮的默认背景
         login.setContentAreaFilled(false);
+        login.addMouseListener(this);
         this.getContentPane().add(login);
 
         //6.添加注册按钮
-        JButton register = new JButton();
         register.setBounds(256, 310, 128, 47);
         register.setIcon(new ImageIcon("image/login/注册按钮.png"));
         //去除按钮的默认边框
         register.setBorderPainted(false);
         //去除按钮的默认背景
         register.setContentAreaFilled(false);
+        register.addMouseListener(this);
         this.getContentPane().add(register);
 
         //7.添加背景图片
@@ -125,4 +131,87 @@ public class LoginJFrame extends JFrame {
         //让弹框展示出来
         jDialog.setVisible(true);
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Object src = e.getSource();
+        if (src == login){
+            String usernameInput = username.getText();
+            String passwordInput = password.getText();
+            String codeInput = code.getText();
+            if (!(codeInput.equals(codeStr))){
+                System.out.println("Code is not correct");
+                showJDialog("Incorrect Verification Code");
+                codeStr = CodeUtil.getCode();
+                rightCode.setText(codeStr);
+                return;
+            }
+            if ((usernameInput.equals("")) || (passwordInput.equals(""))){
+                System.out.println("None input");
+                showJDialog("Fail to input");
+                codeStr = CodeUtil.getCode();
+                rightCode.setText(codeStr);
+                return;
+            }
+            User user = new User(usernameInput,passwordInput);
+            if (contains(user)){
+                this.setVisible(false);
+                new GameJFrame();
+            } else{
+                System.out.println("Does not match");
+                showJDialog("In correct password or username");
+                codeStr = CodeUtil.getCode();
+                rightCode.setText(codeStr);
+                return;
+            }
+
+        } else if (src == register){
+            new RegisterJFrame();
+        } else if(src == rightCode){
+            codeStr = CodeUtil.getCode();
+            rightCode.setText(codeStr);
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        Object btn = e.getSource();
+        if (btn == login){
+            login.setIcon(new ImageIcon("image/login/登录按下.png"));
+        } else if (btn == register){
+            register.setIcon(new ImageIcon("image/login/注册按下.png"));
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        Object btn = e.getSource();
+        if (btn == login){
+            login.setIcon(new ImageIcon("image/login/登录按钮.png"));
+        } else if (btn == register){
+            register.setIcon(new ImageIcon("image/login/注册按钮.png"));
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+    private boolean contains(User user){
+        String name = user.getName();
+        for (int i = 0; i < list.size(); i++) {
+            User cur = list.get(i);
+            if (cur.getName().equals(name)){
+                if (cur.getPassword().equals(user.getPassword())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
+
+
